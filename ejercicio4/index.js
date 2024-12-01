@@ -1,0 +1,69 @@
+// Ejemplo 4 del taller 
+const habitaciones = [
+  { numero: 101, tipo: "individual", precio: 100, ocupada: false },
+  { numero: 102, tipo: "doble", precio: 150, ocupada: false },
+  { numero: 103, tipo: "suite", precio: 200, ocupada: false },
+];
+//regristo de reservas
+
+let reservas = [];
+
+// Funcion para hacer una resrva
+function reservaHabitacion(
+  numeroHabitacion,
+  huesped,
+  fechaIngrseo,
+  fechaSalida
+) {
+  const habitacion = habitaciones.find((h) => h.numero === numeroHabitacion);
+
+  if (!habitacion) {
+    return `la habitacion ${numeroHabitacion} no existe`;
+  }
+
+  if (habitacion.ocupada) {
+    return `la habitacion ${numeroHabitacion} ya esta ocupada`;
+  }
+
+  habitacion.ocupada = true;
+
+  const nuevaReserva = {
+    id: reservas.length + 1,
+    habitacion: numeroHabitacion,
+    huesped,
+    fechaIngrseo,
+    fechaSalida,
+  };
+
+  reservas.push(nuevaReserva);
+  return `Reserva confirmada para ${huesped} en habitacion ${numeroHabitacion}`;
+}
+
+// funcion para ver habitaciones disponibles
+function verDisponibles() {
+  return habitaciones((h) => !h.ocupada);
+}
+
+// funcion para cancelar reserva
+function cancelarReserva(numeroHabitacion) {
+  const habitacion = habitaciones.find((h) => h.numero === numeroHabitacion);
+
+  if (!habitacion) {
+    return `La habitacion ${numeroHabitacion} no existe`;
+  }
+
+  if (!habitacion.ocupada) {
+    return `La habitacion ${numeroHabitacion} ya esta libre`;
+  }
+
+  habitacion.ocupada = false;
+  reservas = reservas.filter((r) => r.habitacion !== numeroHabitacion);
+  return `Reserva cancelada para la habitacion ${numeroHabitacion}`;
+}
+
+//ejemplos de uso
+console.log(verDisponibles());
+console.log(reservaHabitacion(101, "juan perez", "2024-11-28", "2024-11-30"));
+console.log(verDisponibles());
+console.log(cancelarReserva(101));
+console.log(verDisponibles());
